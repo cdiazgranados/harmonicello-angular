@@ -34,3 +34,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 }
+
+export class AppComponent {
+  myScriptElement: HTMLScriptElement;
+  constructor() {
+    this.myScriptElement = document.createElement('script');
+    this.myScriptElement.src = 'src/main/webapp/app/home/main.js';
+    document.body.appendChild(this.myScriptElement);
+  }
+}

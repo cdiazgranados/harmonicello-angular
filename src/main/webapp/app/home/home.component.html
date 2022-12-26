@@ -1,54 +1,317 @@
-<div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
-  </div>
+<html>
+  <head>
+    <!-- <script>
+      console.log("hello");
+      let hertz = 220;
+      let waveform = "sine";
+      let sustain = "OFF";
+      
+      const toggle = document.querySelector('.toggle input');
+      
+      toggle.addEventListener('click', () => {
+          const onOff = toggle.parentNode.querySelector('.onOff');
+          sustain = toggle.checked ? "ON" : "OFF";
+          console.log(sustain);
+      })
+      
+      //add the catch and specifics for the drop down.
+      function getHertz(){
+          hertz = document.getElementById("getHertz").value;
+          hertz = hertz / 2;
+          drawGrid(hertz);
+      }
+      
+      //add a catch for stopping the oscillator when change happens during a sustained note
+      //would this be a feature?
+      function getWaveform() {
+          waveform = document.getElementById("waveform").value;
+          drawGrid(hertz);
+      }
+      
+      
+      
+      function makeString(f) {
+          return [
+              f,
+              f * 2,
+              f * 3,
+              f * 4,
+              f * 5,
+              f * 6,
+              f * 7,
+              f * 8
+          ]
+      }
+      
+      //perhaps populate an array of string values from the database
+      function makeGrid(f) {
+          let string1 = f;
+          let string2 = (string1 * (4/3)) /2;
+          let string3 = (string2 * (4/3)) /2;
+          let string4 = (string3 * (4/3)) /2;
+      
+          return [
+              makeString(string1),
+              makeString(string2),
+              makeString(string3),
+              makeString(string4)
+          ]
+      }
+      
+      
+      function drawGrid(f) {
+          let notes = makeGrid(f);
+      
+          for (let i = 0; i < notes.length; i++) {
+              var element = document.getElementById(i);
+              var children = element.children;
+              for (let j = 0; j < children.length; j++) {
+                  var child = children[j];
+                  child.setAttribute("data-note", notes[i][j])
+                  child.setAttribute("state", "off")
+                  child.addEventListener("click", toggleSynth);
+              }
+          }
+      }
+      
+      
+      
+      const audioCtx = new AudioContext();
+      audioCtx.suspend();
+      
+      let synths = {}; //holding values
+      
+      
+      function toggleSynth(event) {
+          let button = event.target;
+          let frequency = button.getAttribute("data-note");
+          if(button.getAttribute("state") == "off" && sustain == "OFF") {
+              console.log("testing no sustain");
+              button.setAttribute("state", "on");
+              button.style.background = '#00FF00';
+              //have to create a new audio context for each note that is not sustained
+              const audioCt = new AudioContext();
+              let oscillatorNode = audioCt.createOscillator();
+              let gainNode = audioCt.createGain();
+              let output = audioCt.destination;
+              oscillatorNode.connect(gainNode);
+              gainNode.gain.setValueAtTime(0.1, audioCt.currentTime);
+              gainNode.connect(output);
+              oscillatorNode.frequency.value = frequency;
+              oscillatorNode.type = waveform;
+              oscillatorNode.start(0);
+              oscillatorNode.stop(.8);
+      
+      
+              button.setAttribute("state", "off");
+              button.style.background= button.getAttribute("background-color");
+      
+      
+          } else if (button.getAttribute("state") == "off" && sustain == "ON") { //AND SUSTAIN TOGGLE
+              button.setAttribute("state", "on");
+              button.style.background = '#00FF00';
+              let oscillatorNode = makeOscillator();
+              oscillatorNode.start();
+              oscillatorNode.type = waveform;
+              oscillatorNode.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+              synths[frequency] = oscillatorNode;
+          } else {
+              button.setAttribute("state", "off");
+              button.style.background= button.getAttribute("background-color");
+              synths[frequency].stop();
+          }
+          console.log(synths);
+      
+          audioCtx.resume();
+      }
+      
+      function makeOscillator() {
+          let oscillatorNode = audioCtx.createOscillator();
+          let gainNode = audioCtx.createGain();
+          let output = audioCtx.destination;
+      
+          oscillatorNode.connect(gainNode);
+          gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          gainNode.connect(output);
+          // oscillatorNode.start()
+      
+          return oscillatorNode;
+      }
+      
+      drawGrid(hertz);
+      </script> -->
+  </head>
+  <style>
+    .string {
+      display: flex;
+      height: 700px;
+      width: 100px;
+      border-right: 2px solid;
+      align-items: flex-end;
+      flex-direction: column;
+    }
 
-  <div class="col-md-9">
-    <h1 class="display-4"><span>Welcome, Java Hipster!</span> (Harmonicello)</h1>
+    .open-strings {
+      /* background-color: steelblue; /*#4CAF50; Green */
+      height: 50px;
+      width: 50px;
+      border: none;
+      color: white;
+      padding: 5px;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+      position: relative;
+      left: 30px;
+      margin-bottom: 25px;
+      visibility: visible;
+      cursor: pointer;
+    }
 
-    <p class="lead">This is your homepage</p>
+    .open-strings:hover {
+      filter: brightness(160%) saturate(110%);
+    }
 
-    <div [ngSwitch]="account !== null">
-      <div class="alert alert-success" *ngSwitchCase="true">
-        <span id="home-logged-message" *ngIf="account">You are logged in as user "{{ account.login }}".</span>
+    .note {
+      background-color: steelblue; /* #4CAF50; Green */
+      height: 50px;
+      width: 50px;
+      border: none;
+      color: white;
+      padding: 5px;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+      position: relative;
+      left: 30px;
+      margin-bottom: 25px;
+      visibility: visible;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .note:hover {
+      filter: brightness(160%) saturate(110%);
+    }
+    .border {
+      border: 3px;
+    }
+
+    .c-string {
+      background-color: rebeccapurple;
+    }
+
+    .g-string {
+      background-color: slateblue;
+    }
+
+    .d-string {
+      background-color: slategrey;
+    }
+
+    .a-string {
+      background-color: steelblue;
+    }
+  </style>
+  <body>
+    <script src="./main.js">
+      alert("hello");
+    </script>
+    <script>
+      alert('hello');
+    </script>
+    <div class="row">
+      <div class="col-md-3">
+        <span class="hipster img-fluid rounded"></span>
       </div>
 
-      <div class="alert alert-warning" *ngSwitchCase="false">
-        <span>If you want to </span>
-        <a class="alert-link" (click)="login()">sign in</a
-        ><span
-          >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
-          password="user").</span
-        >
-      </div>
+      <div class="col-md-9">
+        <h1 class="display-4"><span>Welcome, Java Hipster!</span> (Harmonicello)</h1>
 
-      <div class="alert alert-warning" *ngSwitchCase="false">
-        <span>You don't have an account yet?</span>&nbsp;
-        <a class="alert-link" routerLink="account/register">Register a new account</a>
+        <p class="lead">This is your homepage</p>
+
+        <div [ngSwitch]="account !== null">
+          <div class="alert alert-success" *ngSwitchCase="true">
+            <span id="home-logged-message" *ngIf="account">You are logged in as user "{{ account.login }}".</span>
+          </div>
+
+          <div class="alert alert-warning" *ngSwitchCase="false">
+            <span>If you want to </span>
+            <a class="alert-link" (click)="login()">sign in</a
+            ><span
+              >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
+              password="user").</span
+            >
+          </div>
+
+          <div class="alert alert-warning" *ngSwitchCase="false">
+            <span>You don't have an account yet?</span>&nbsp;
+            <a class="alert-link" routerLink="account/register">Register a new account</a>
+          </div>
+        </div>
+        <div class="harmonicello">
+          <div class="string" id="3">
+            <div class="open-strings c-string" data-note="">C</div>
+            <div class="note c-string" data-note="">2</div>
+            <div class="note c-string" data-note="">3</div>
+            <div class="note c-string" data-note="">4</div>
+            <div class="note c-string" data-note="">5</div>
+            <div class="note c-string" data-note="">6</div>
+            <div class="note c-string" data-note="">7</div>
+            <div class="note c-string" data-note="">8</div>
+          </div>
+          <div class="string" id="2">
+            <div class="open-strings g-string" data-note="">G</div>
+            <div class="note g-string" data-note="">2</div>
+            <div class="note g-string" data-note="">3</div>
+            <div class="note g-string" data-note="">4</div>
+            <div class="note g-string" data-note="">5</div>
+            <div class="note g-string" data-note="">6</div>
+            <div class="note g-string" data-note="">7</div>
+            <div class="note g-string" data-note="">8</div>
+          </div>
+          <div class="string" id="1">
+            <div class="open-strings d-string" data-note="">D</div>
+            <div class="note d-string" data-note="">2</div>
+            <div class="note d-string" data-note="">3</div>
+            <div class="note d-string" data-note="">4</div>
+            <div class="note d-string" data-note="">5</div>
+            <div class="note d-string" data-note="">6</div>
+            <div class="note d-string" data-note="">7</div>
+            <div class="note d-string" data-note="">8</div>
+          </div>
+          <div class="string" id="0">
+            <div class="open-strings a-string" data-note="">A</div>
+            <div class="note a-string" data-note="">2</div>
+            <div class="note a-string" data-note="">3</div>
+            <div class="note a-string" data-note="">4</div>
+            <div class="note a-string" data-note="">5</div>
+            <div class="note a-string" data-note="">6</div>
+            <div class="note a-string" data-note="">7</div>
+            <div class="note a-string" data-note="">8</div>
+          </div>
+        </div>
+        <input type="number" id="getHertz" value="440" min="430" max="450" />
+        <button onclick="getHertz()">Set Hertz</button>
+        <label for="waveform">Waveform:</label>
+        <select onchange="getWaveform()" name="waveform" id="waveform">
+          <option value="sine">Sinewave</option>
+          <option value="triangle">Triangle</option>
+          <option value="square">Square</option>
+          <option value="sawtooth">Sawtooth</option>
+        </select>
+        <label class="toggle">
+          <span class="onoff">Sustain</span>
+          <input type="checkbox" />
+          <span class="slider round"></span>
+        </label>
       </div>
     </div>
-
-    <p>If you have any question on JHipster:</p>
-
-    <ul>
-      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">JHipster homepage</a></li>
-      <li>
-        <a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">JHipster on Stack Overflow</a>
-      </li>
-      <li>
-        <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer"
-          >JHipster bug tracker</a
-        >
-      </li>
-      <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">JHipster public chat room</a>
-      </li>
-      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">follow @jhipster on Twitter</a></li>
-    </ul>
-
-    <p>
-      <span>If you like JHipster, don't forget to give us a star on</span>
-      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
-    </p>
-  </div>
-</div>
+  </body>
+</html>

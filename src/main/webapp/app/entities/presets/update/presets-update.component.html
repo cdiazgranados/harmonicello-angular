@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-presets-heading" data-cy="PresetsCreateUpdateHeading">Create or edit a Presets</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_presetTitle">Preset Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="presetTitle"
+            id="field_presetTitle"
+            data-cy="presetTitle"
+            formControlName="presetTitle"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_hertz">Hertz</label>
+          <input type="number" class="form-control" name="hertz" id="field_hertz" data-cy="hertz" formControlName="hertz" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_sustain">Sustain</label>
+          <input type="checkbox" class="form-check" name="sustain" id="field_sustain" data-cy="sustain" formControlName="sustain" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_waveform">Waveform</label>
+          <select class="form-control" name="waveform" formControlName="waveform" id="field_waveform" data-cy="waveform">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let waveform of waveformValues" [value]="waveform">waveform</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_instrument">Instrument</label>
+          <select class="form-control" name="instrument" formControlName="instrument" id="field_instrument" data-cy="instrument">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let instrument of instrumentValues" [value]="instrument">instrument</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_user">User</label>
+          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

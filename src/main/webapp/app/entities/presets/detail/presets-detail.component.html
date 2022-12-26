@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="presets">
+      <h2 data-cy="presetsDetailsHeading"><span>Presets</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ presets.id }}</span>
+        </dd>
+        <dt><span>Preset Title</span></dt>
+        <dd>
+          <span>{{ presets.presetTitle }}</span>
+        </dd>
+        <dt><span>Hertz</span></dt>
+        <dd>
+          <span>{{ presets.hertz }}</span>
+        </dd>
+        <dt><span>Sustain</span></dt>
+        <dd>
+          <span>{{ presets.sustain }}</span>
+        </dd>
+        <dt><span>Waveform</span></dt>
+        <dd>
+          <span>{{ presets.waveform }}</span>
+        </dd>
+        <dt><span>Instrument</span></dt>
+        <dd>
+          <span>{{ presets.instrument }}</span>
+        </dd>
+        <dt><span>User</span></dt>
+        <dd>
+          <span>{{ presets.user?.login }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/presets', presets.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

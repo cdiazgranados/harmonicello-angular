@@ -1,0 +1,45 @@
+{
+  "applications": "*",
+  "changelogDate": "20221224181504",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "presets",
+  "fields": [
+    {
+      "fieldName": "presetTitle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "hertz",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "sustain",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "waveform",
+      "fieldType": "Waveform",
+      "fieldValues": "SINE,TRIANGLE,SQUARE,SAWTOOTH"
+    },
+    {
+      "fieldName": "instrument",
+      "fieldType": "Instrument",
+      "fieldValues": "VIOLIN,VIOLA,CELLO,BASS"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Presets",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}
